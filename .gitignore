@@ -1,0 +1,73 @@
+# ---------------------------------------------------------------
+# .gitignore para proyecto Unity (basado en el estandar oficial de GitHub)
+# Unity 6000.4.3f1
+# ---------------------------------------------------------------
+
+# Carpetas generadas por Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+.utmp/
+UIElementsSchema/
+
+# Cache del asset y del importador
+/[Aa]ssets/AssetStoreTools*
+/[Aa]ssets/Plugins/Editor/JetBrains*
+
+# Ficheros de proyecto de los IDE (se regeneran solos)
+.vs/
+.vscode/
+.idea/
+.consulo/
+ExportedObj/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Compilacion de Burst (no debe versionarse)
+*_BurstDebugInformation_DoNotShip/
+*_BackUpThisFolder_ButDontShipItWithYourGame/
+
+# Ejecutables y artefactos de build de Android / escritorio
+*.apk
+*.aab
+*.unitypackage
+*.app
+*.dll
+
+# Crashlogs de Unity
+sysinfo.txt
+crashlytics-build.properties
+
+# Copias de respaldo y comprimidos que no deben ir al repo
+*.zip
+*.rar
+*.7z
+
+# Ficheros del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ficheros privados del autor
+*.private
+*.private.meta
+
+# Ficheros de solucion de Visual Studio (los regenera el IDE)
+*.slnx
