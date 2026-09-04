@@ -1,6 +1,4 @@
-# Planificación y supervisión de vuelo de un dron en Realidad Mixta
-
-<!-- TODO Jaime: sustituye el título de arriba por el título exacto de tu TFM si difiere. -->
+# Interfaz de Realidad Mixta para la teleoperación de drones por usuarios sin experiencia en pilotaje
 
 Aplicación de Realidad Mixta para **Meta Quest** que permite planificar, simular y
 supervisar el vuelo de un dron **DJI Tello** dentro del espacio físico real del
@@ -8,7 +6,7 @@ usuario. El operador coloca puntos de ruta (*waypoints*) en su propia habitació
 valida que la trayectoria es segura y, después, ejecuta la misión sobre el dron
 físico mientras recibe telemetría en directo.
 
-> Trabajo Fin de Máster — <!-- TODO: Máster / Universidad. Ej: Máster en Ingeniería Industrial, Universidad Carlos III de Madrid --> · Autor: **Jaime Provencio** · 2026
+> Trabajo Fin de Máster · Universidad Carlos III de Madrid (UC3M) · Autor: **Jaime Provencio Solís** · 2026
 
 ---
 
@@ -96,13 +94,10 @@ un TFM. Las limitaciones y el trabajo futuro se detallan en la memoria del proye
 
 ## Licencia
 
-<!-- TODO: pendiente de confirmar con la tutoría / normativa de la universidad.
-     Opción habitual: licencia MIT. Cuando lo decidas, añade aquí el texto y un fichero LICENSE. -->
-
-Licencia pendiente de definir.
+Publicado bajo la licencia **MIT**. Ver el fichero [LICENSE](LICENSE).
 
 ---
 
 ## Autor
 
-**Jaime Provencio** — Trabajo Fin de Máster, 2026.
+**Jaime Provencio Solís**. Trabajo Fin de Máster, 2026.
