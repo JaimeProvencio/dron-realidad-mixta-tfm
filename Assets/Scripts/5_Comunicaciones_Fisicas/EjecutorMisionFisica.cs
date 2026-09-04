@@ -2,26 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- * ========================================================================
- * SCRIPT: EjecutorMisionFisica
- *
- * FUNCION:
- * Secuenciador de vuelo waypoint a waypoint. Orquesta el ciclo de la
- * mision: despegue -> pausa en waypoint 0 -> navegacion pausada por
- * waypoints -> aterrizaje.
- *
- * Tras el despegue el dron se estabiliza en el waypoint 0 y entrega el
- * control al usuario (mismo menu que el resto de waypoints) antes de
- * viajar al primer waypoint manual.
- *
- * Cuando la ruta finaliza (no quedan waypoints), avisa a la FSM para que
- * desactive el boton de "siguiente waypoint".
- *
- * El regreso al origen se ha eliminado: en open loop el trayecto recto es
- * propenso a colisiones. La salida segura es el aterrizaje vertical.
- * ========================================================================
- */
+// EjecutorMisionFisica — secuenciador de vuelo waypoint a waypoint. Orquesta
+// el ciclo: despegue -> pausa en el waypoint 0 -> navegacion pausada por
+// waypoints -> aterrizaje. Tras el despegue el dron se estabiliza en el
+// waypoint 0 y entrega el control al usuario. Al terminar la ruta avisa a la
+// FSM para desactivar el boton de "siguiente waypoint".
+//
+// El regreso al origen se elimino: en lazo abierto el trayecto recto es
+// propenso a colisiones; la salida segura es el aterrizaje vertical.
 public class EjecutorMisionFisica : MonoBehaviour
 {
     [Header("Conexiones")]
@@ -40,7 +28,7 @@ public class EjecutorMisionFisica : MonoBehaviour
     [Tooltip("Segundos de espera tras cada comando de rotacion.")]
     [SerializeField] private float esperaTrasRotacion = 1.5f;
 
-    // ── Estado interno ─────────────────────────────────────────────────
+    // Estado interno
     private bool esperandoRespuestaDron = false;
     private bool abortarMision = false;
     private Coroutine latidoCoroutine;
@@ -51,19 +39,13 @@ public class EjecutorMisionFisica : MonoBehaviour
     private Vector3 ultimaPosicionReal;
     private float ultimaRotacionReal;
 
-    // ══════════════════════════════════════════════════════════════════
-    // UNITY LIFECYCLE
-    // ══════════════════════════════════════════════════════════════════
-
     void Start()
     {
         if (redUDP != null)
             redUDP.OnRespuestaRecibida += ProcesarRespuestaDron;
     }
 
-    // ══════════════════════════════════════════════════════════════════
-    // API PUBLICA
-    // ══════════════════════════════════════════════════════════════════
+    // --- API publica ---
 
     public void IniciarMisionAutomatica()
     {
@@ -131,9 +113,7 @@ public class EjecutorMisionFisica : MonoBehaviour
         StartCoroutine(SecuenciaCorreccion(posicionRealSenalada));
     }
 
-    // ══════════════════════════════════════════════════════════════════
-    // SECUENCIAS PRIVADAS
-    // ══════════════════════════════════════════════════════════════════
+    // --- Secuencias privadas ---
 
     private IEnumerator SecuenciadorDeVuelo()
     {
@@ -231,9 +211,7 @@ public class EjecutorMisionFisica : MonoBehaviour
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════
-    // UTILIDADES INTERNAS
-    // ══════════════════════════════════════════════════════════════════
+    // --- Utilidades internas ---
 
     private IEnumerator EnviarComandoYEsperar(string comando)
     {

@@ -1,17 +1,10 @@
 using UnityEngine;
 using Oculus.Interaction;
 
-/*
- * ========================================================================
- * SCRIPT: TiradorRotacionY
- * FUNCION: Tirador para orientar el chasis del dron en planificacion.
- * Mientras esta agarrado, el chasis gira libremente siguiendo la posicion
- * de la mano (sin iman de retencion: cualquier giro, por pequeno que sea,
- * se refleja). El ruido de rotacion se absorbe despues, al crear el
- * waypoint (RouteManager hereda el yaw anterior si la diferencia es menor
- * que su umbral). Al soltar, el tirador vuelve a su posicion de reposo.
- * ========================================================================
- */
+// TiradorRotacionY — tirador para orientar el chasis del dron en planificacion.
+// Mientras esta agarrado, el chasis gira siguiendo la mano (cualquier giro se
+// refleja; el ruido se absorbe luego en RouteManager al crear el waypoint).
+// Al soltar, el tirador vuelve suavemente a su posicion de reposo.
 [RequireComponent(typeof(Grabbable))]
 public class TiradorRotacionY : MonoBehaviour
 {

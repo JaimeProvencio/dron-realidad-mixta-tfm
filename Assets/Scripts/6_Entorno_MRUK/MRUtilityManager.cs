@@ -2,14 +2,9 @@ using UnityEngine;
 using System.Collections;
 using Meta.XR.MRUtilityKit;
 
-/*
- * ========================================================================
- * SCRIPT: MRUtilityManager
- * RESPONSABILIDAD: Controlar la visualización de la malla espacial,
- * llamar a la herramienta nativa de escaneo y enrutar las capas físicas
- * buscando directamente en la jerarquía de la habitación dinámica.
- * ========================================================================
- */
+// MRUtilityManager — controla la visualizacion de la malla espacial de MRUK,
+// lanza la herramienta nativa de escaneo y asigna las capas fisicas buscando
+// en la jerarquia de la habitacion.
 public class MRUtilityManager : MonoBehaviour
 {
     private bool recargaPendiente = false;
@@ -21,7 +16,7 @@ public class MRUtilityManager : MonoBehaviour
     {
         if (MRUK.Instance != null)
         {
-            // Suscripción dual para capturar tanto creaciones iniciales como modificaciones.
+            // Se escuchan creacion y actualizacion de la habitacion
             MRUK.Instance.RoomCreatedEvent.AddListener(AlDetectarHabitacion);
             MRUK.Instance.RoomUpdatedEvent.AddListener(AlDetectarHabitacion);
             Debug.Log("[MR] Suscrito con éxito a eventos nativos de creación y actualización.");
@@ -37,17 +32,13 @@ public class MRUtilityManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Muestra u oculta la representación poligonal buscando los renderizadores
-    /// directamente en el objeto de la habitación activa de MRUK.
-    /// </summary>
+    // Muestra u oculta la malla de la habitacion activa de MRUK.
     public void AlternarMallaVisual()
     {
         mallaVisible = !mallaVisible;
 
         if (MRUK.Instance != null && MRUK.Instance.GetCurrentRoom() != null)
         {
-            // Búsqueda dirigida a la habitación real instanciada en memoria
             MRUKRoom habitacionActual = MRUK.Instance.GetCurrentRoom();
             Renderer[] mallasGeneradas = habitacionActual.GetComponentsInChildren<Renderer>(true);
 
@@ -99,10 +90,10 @@ public class MRUtilityManager : MonoBehaviour
 
     private IEnumerator RutinaEnrutarCapa(MRUKRoom habitacionGenerada)
     {
-        // Retraso de 1 segundo para garantizar que Meta procese la inserción de componentes físicos y visuales antes de iterar.
+        // Espera 1 s para que Meta termine de crear los componentes antes de recorrerlos
         yield return new WaitForSeconds(1.0f);
 
-        // 1. GESTIÓN FÍSICA (Colisiones del Validador)
+        // Fisica: mover los colliders de la habitacion a la capa que usa el validador
         int capaEntorno = LayerMask.NameToLayer("EntornoReal");
         if (capaEntorno != -1)
         {
@@ -121,12 +112,10 @@ public class MRUtilityManager : MonoBehaviour
             Debug.LogError("[MR] ERROR: La capa 'EntornoReal' no existe en los Tags & Layers de Unity.");
         }
 
-        // 2. GESTIÓN VISUAL (Sincronización de la malla con el estado de la UI)
-        // Se busca directamente dentro de 'habitacionGenerada' garantizando que el array devuelva los datos correctos
+        // Visual: la geometria nueva respeta el estado de visibilidad actual de la UI
         Renderer[] mallasNuevas = habitacionGenerada.GetComponentsInChildren<Renderer>(true);
         foreach (Renderer malla in mallasNuevas)
         {
-            // Fuerza a la nueva geometría a respetar el estado actual de visibilidad
             malla.enabled = mallaVisible;
         }
         Debug.Log($"[MR] Sincronización visual completada. Renderizadores interceptados: {mallasNuevas.Length}. Visibilidad actual: {mallaVisible}");

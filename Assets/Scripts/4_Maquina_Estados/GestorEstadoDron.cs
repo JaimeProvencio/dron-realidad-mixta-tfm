@@ -2,45 +2,29 @@
 using UnityEngine.UI;
 using TMPro;
 
-/*
- * ========================================================================
- * SCRIPT: GestorEstadoDron
- *
- * Maquina de Estados Finitos (FSM) central del sistema. Controla la
- * transicion entre modos y sincroniza paneles, hologramas y canvases.
- *
- * FLUJO DE VUELO (cierre de bucle manual):
- *   EnVuelo                     -> dron en transito. Boton de parada de emergencia.
- *   ConfirmandoParadaEmergencia -> confirmacion "parar motores?". "Si" corta motores
- *                                  (comando emergency, el dron CAE); "No" vuelve al
- *                                  estado anterior.
- *   EsperandoDecision           -> dron quieto en waypoint. Menu de tres opciones
- *                                  (siguiente, corregir, aterrizar aqui).
- *   CorrigiendoPosicion         -> usuario arrastrando el dron de correccion.
- *
- * PARADA DE EMERGENCIA: el Tello es SDK 1.3, donde no hay stop suave (el "go" es
- * bloqueante a bordo y ni "stop" ni "rc 0 0 0 0" lo interrumpen). El unico corte
- * real es "emergency", que APAGA los motores y el dron cae; por eso se pide
- * confirmacion. El boton se DESHABILITA en modo prueba (con protectores y poca
- * altura no hay peligro y se evita danar el dron).
- *
- * MODO TEST: muestra el escenario de prueba y un boton para alternar entre
- * el escenario 1 (rack) y el escenario 2 (techo de vigas). El boton de
- * alternancia esta oculto por defecto y solo aparece con el modo test activo.
- *
- * MODO MANUAL: oculta hologramas; el canvas del mando izquierdo muestra
- * bateria, despegue y retorno al modo ruta.
- *
- * IDIOMA: los textos generados por codigo (toggles y escenario) se obtienen
- * de GestorIdioma por clave y se repintan al cambiar idioma. La bateria
- * (numero con sufijo) no se traduce.
- * ========================================================================
- */
+// GestorEstadoDron — maquina de estados finitos (FSM) central del sistema.
+// Controla las transiciones entre modos y sincroniza paneles, hologramas y
+// canvases.
+//
+// Flujo de vuelo (cierre de bucle manual):
+//   EnVuelo                     -> dron en transito; boton de parada de emergencia.
+//   ConfirmandoParadaEmergencia -> "parar motores?": "Si" corta motores (el dron
+//                                  CAE); "No" vuelve al estado anterior.
+//   EsperandoDecision           -> dron quieto en waypoint; menu de tres opciones.
+//   CorrigiendoPosicion         -> usuario arrastrando el dron de correccion.
+//
+// Parada de emergencia: el Tello (SDK 1.3) no tiene stop suave; el "go" es
+// bloqueante a bordo y solo "emergency" lo corta (apaga motores, el dron cae),
+// por eso se confirma. Se deshabilita en modo prueba (poca altura, sin peligro).
+//
+// Modo test: alterna entre escenario 1 (rack) y 2 (techo de vigas).
+// Modo manual: oculta hologramas; la muneca muestra bateria, despegue y retorno.
+// Idioma: los textos generados por codigo se piden a GestorIdioma por clave.
 public class GestorEstadoDron : MonoBehaviour
 {
     public enum EstadoDron
     {
-        Desconectado,
+        // Menu principal en tierra: estado inicial al arrancar y de reposo tras cada mision.
         Tierra,
         EditandoRutas,
         ConfirmandoEjecucion,
@@ -54,7 +38,7 @@ public class GestorEstadoDron : MonoBehaviour
     }
 
     [Header("Estado del Sistema")]
-    [SerializeField] private EstadoDron estadoActual = EstadoDron.Desconectado;
+    [SerializeField] private EstadoDron estadoActual = EstadoDron.Tierra;
 
     [Header("Conexiones Arquitectonicas")]
     [SerializeField] private EjecutorMisionFisica ejecutorMision;
@@ -109,7 +93,6 @@ public class GestorEstadoDron : MonoBehaviour
 
     private static readonly EstadoDron[] estadosCanvasPrincipal =
     {
-        EstadoDron.Desconectado,
         EstadoDron.Tierra,
         EstadoDron.EditandoRutas,
         EstadoDron.ConfirmandoEjecucion
@@ -119,7 +102,7 @@ public class GestorEstadoDron : MonoBehaviour
     {
         if (botonAlternarEscenario != null) botonAlternarEscenario.SetActive(false);
         RefrescarTextosDinamicos();   // Pinta toggles y escenario en el idioma inicial
-        CambiarEstado(EstadoDron.Desconectado);
+        CambiarEstado(EstadoDron.Tierra);
     }
 
     void OnEnable()
@@ -151,9 +134,7 @@ public class GestorEstadoDron : MonoBehaviour
         return (GestorIdioma.Instancia != null) ? GestorIdioma.Instancia.Traducir(clave) : clave;
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // CAMBIO DE ESTADO
-    // ════════════════════════════════════════════════════════════════════
+    // --- Cambio de estado ---
 
     public void CambiarEstado(EstadoDron nuevo)
     {
@@ -185,7 +166,7 @@ public class GestorEstadoDron : MonoBehaviour
         if (canvasPrincipal != null) canvasPrincipal.SetActive(usaCanvasPrincipal);
         if (canvasMuneca != null) canvasMuneca.SetActive(!usaCanvasPrincipal);
 
-        bool mostrarRuta = estadoActual != EstadoDron.Desconectado && estadoActual != EstadoDron.Tierra;
+        bool mostrarRuta = estadoActual != EstadoDron.Tierra;
         bool mostrarHerramientas = estadoActual == EstadoDron.EditandoRutas;
         bool enFaseDeVuelo = estadoActual == EstadoDron.EnVuelo ||
                                   estadoActual == EstadoDron.ConfirmandoParadaEmergencia ||
@@ -202,7 +183,6 @@ public class GestorEstadoDron : MonoBehaviour
 
         switch (estadoActual)
         {
-            case EstadoDron.Desconectado:
             case EstadoDron.Tierra:
                 if (objetoAgarraderaMenu != null) objetoAgarraderaMenu.SetActive(true);
                 if (panelPrincipal != null) panelPrincipal.SetActive(true);
@@ -251,9 +231,7 @@ public class GestorEstadoDron : MonoBehaviour
         }
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // API PUBLICA — llamada por EjecutorMisionFisica y ControladorModoManual
-    // ════════════════════════════════════════════════════════════════════
+    // --- API publica (la llaman EjecutorMisionFisica y ControladorModoManual) ---
 
     public void MostrarMenuWaypoint()
     {
@@ -287,11 +265,9 @@ public class GestorEstadoDron : MonoBehaviour
         CambiarEstado(EstadoDron.Tierra);
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // EVENTOS ONCLICK (UI)
-    // ════════════════════════════════════════════════════════════════════
+    // --- Eventos OnClick (UI) ---
 
-    // ── Planificacion ─────────────────────────────────────────────────────
+    // Planificacion
 
     public void Click_MenuRutas() => CambiarEstado(EstadoDron.EditandoRutas);
     public void Click_VolverAlMenuPrincipal() => CambiarEstado(EstadoDron.Tierra);
@@ -369,7 +345,7 @@ public class GestorEstadoDron : MonoBehaviour
 
     public void Click_ConfirmarEjecucionNo() => CambiarEstado(EstadoDron.EditandoRutas);
 
-    // ── En vuelo ───────────────────────────────────────────────────────────
+    // En vuelo
 
     public void Click_ParadaEmergencia()
     {
@@ -406,7 +382,7 @@ public class GestorEstadoDron : MonoBehaviour
         }
     }
 
-    // ── Menu waypoint ──────────────────────────────────────────────────────
+    // Menu waypoint
 
     public void Click_WaypointSiguiente()
     {
@@ -422,7 +398,7 @@ public class GestorEstadoDron : MonoBehaviour
         else Debug.LogError("[FSM] ControladorCorreccion no asignado.");
     }
 
-    // ── Correccion ─────────────────────────────────────────────────────────
+    // Correccion
 
     public void Click_ConfirmarCorreccion()
     {
@@ -437,7 +413,7 @@ public class GestorEstadoDron : MonoBehaviour
         CambiarEstado(EstadoDron.EsperandoDecisionWaypoint);
     }
 
-    // ── Confirmacion de aterrizaje ─────────────────────────────────────────
+    // Confirmacion de aterrizaje
 
     public void Click_PrepararAterrizajeVertical()
     {

@@ -6,23 +6,11 @@ using System.Threading.Tasks;
 using UnityEngine;
 using TMPro;
 
-/*
- * ========================================================================
- * SCRIPT: GrabadorVideoTello
- *
- * FUNCION:
- * Captura el stream de video H.264 crudo del Tello (puerto UDP 11111) y
- * lo vuelca tal cual a un fichero .h264 en el almacenamiento de las gafas.
- * NO decodifica: la conversion a .mp4 se hace despues en un PC con FFmpeg.
- *
- * FLUJO:
- *  - Activa el stream con "streamon" (via TelloUDP) y abre el puerto 11111.
- *  - Mientras graba, escribe cada paquete recibido al fichero.
- *  - Al detener, cierra el fichero y envia "streamoff".
- *
- * Disponible solo en modo planificacion. Disparo manual por boton Grabar.
- * ========================================================================
- */
+// GrabadorVideoTello — captura el stream de video H.264 crudo del Tello
+// (puerto UDP 11111) y lo vuelca tal cual a un .h264 en el almacenamiento de
+// las gafas. No decodifica: la conversion a .mp4 se hace luego en PC con FFmpeg.
+// Activa el stream con "streamon", escribe cada paquete y al detener envia
+// "streamoff". Solo en modo planificacion, con disparo manual por boton.
 public class GrabadorVideoTello : MonoBehaviour
 {
     [Header("Conexiones")]
@@ -44,20 +32,14 @@ public class GrabadorVideoTello : MonoBehaviour
     private bool grabando = false;
     private float tiempoInicio;
 
-    // ════════════════════════════════════════════════════════════════════
-    // API PUBLICA (botones)
-    // ════════════════════════════════════════════════════════════════════
-
-    /// <summary>Boton Grabar/Detener: alterna el estado de grabacion.</summary>
+    // Boton Grabar/Detener: alterna el estado de grabacion.
     public void Click_ToggleGrabacion()
     {
         if (grabando) DetenerGrabacion();
         else IniciarGrabacion();
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // GRABACION
-    // ════════════════════════════════════════════════════════════════════
+    // --- Grabacion ---
 
     private void IniciarGrabacion()
     {
@@ -118,9 +100,7 @@ public class GrabadorVideoTello : MonoBehaviour
         Debug.Log("[Grabador] Grabacion detenida.");
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // STREAM UDP (puerto 11111)
-    // ════════════════════════════════════════════════════════════════════
+    // --- Stream UDP (puerto 11111) ---
 
     private void AbrirPuertoVideo()
     {
@@ -173,9 +153,7 @@ public class GrabadorVideoTello : MonoBehaviour
         }
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // UTILIDADES
-    // ════════════════════════════════════════════════════════════════════
+    // --- Utilidades ---
 
     private void ActualizarEstado()
     {

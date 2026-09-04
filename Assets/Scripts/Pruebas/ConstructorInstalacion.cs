@@ -1,34 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- * ========================================================================
- * SCRIPT: ConstructorInstalacion
- *
- * Genera los escenarios virtuales de la prueba con usuarios y permite
- * alternar entre ellos. Hay dos escenarios excluyentes:
- *
- *   Escenario 1: rack de almacen (estanteria con bastidores, largueros y
- *   cajas) y 5 esferas de inspeccion en su cara frontal, coplanares. Se
- *   trata como un bloque macizo: un unico BoxCollider solido envolvente.
- *   Es la tarea simple (puntos de paso en un plano).
- *
- *   Escenario 2: estructura de techo industrial de vigas a DOS niveles, con
- *   cruces de San Andres (arriostramiento diagonal) en los laterales. El
- *   nivel inferior es mas despejado y deja ver el superior, mas entramado.
- *   Cada viga conserva su propio collider, de modo que el dron puede volar
- *   entre los huecos y solo colisiona al tocar una viga. Sobre cuatro nudos
- *   de la estructura hay marcas de interes esfericas (sin collider),
- *   superpuestas a la estructura. Es la tarea compleja (3D, no medida).
- *
- * Se ancla al OriginPoint en Start(). El escenario 1 usa offsetDesdeOrigen;
- * el escenario 2 usa su propia distancia al QR (distanciaTechoAlQR), pensada
- * para quedar MAS CERCA del QR que la estanteria.
- *
- * SetModoTest(bool) activa/desactiva la visibilidad global; AlternarEscenario()
- * cambia cual de los dos escenarios esta activo.
- * ========================================================================
- */
+// ConstructorInstalacion — genera por codigo los dos escenarios virtuales de
+// la prueba con usuarios y permite alternar entre ellos (excluyentes):
+//
+//   Escenario 1 (tarea simple): rack de almacen con 5 esferas de inspeccion
+//   coplanares en su cara frontal. Se trata como un bloque macizo (un unico
+//   BoxCollider envolvente): los waypoints quedan en un plano.
+//
+//   Escenario 2 (tarea compleja, 3D): estructura de techo de vigas a dos
+//   niveles con cruces de San Andres. Cada viga conserva su collider, asi que
+//   el dron vuela entre los huecos y solo choca al tocar una viga. Cuatro nudos
+//   llevan marcas de interes esfericas sin collider.
+//
+// Se ancla al OriginPoint en Start(). El escenario 1 usa offsetDesdeOrigen; el 2
+// usa distanciaTechoAlQR (queda mas cerca del QR que el rack). SetModoTest()
+// controla la visibilidad global y AlternarEscenario() cambia cual esta activo.
 public class ConstructorInstalacion : MonoBehaviour
 {
     [Header("Anclaje al Origen del Dron")]
@@ -97,7 +84,7 @@ public class ConstructorInstalacion : MonoBehaviour
     [Tooltip("Capa fisica que detecta el validador de ruta.")]
     [SerializeField] private string nombreCapaFisica = "EntornoReal";
 
-    // ── Estado interno ───────────────────────────────────────────────────
+    // Estado interno
     private readonly List<Renderer> renderersEsc1 = new List<Renderer>();
     private readonly List<GameObject> objetosEsc2 = new List<GameObject>();
     private readonly List<LineRenderer> depthHelpersEsc1 = new List<LineRenderer>();
@@ -109,10 +96,6 @@ public class ConstructorInstalacion : MonoBehaviour
 
     public bool ModoTestActivo => modoTestActivo;
     public int EscenarioActivo => escenarioActivo;
-
-    // ════════════════════════════════════════════════════════════════════
-    // UNITY LIFECYCLE
-    // ════════════════════════════════════════════════════════════════════
 
     void Start()
     {
@@ -141,9 +124,7 @@ public class ConstructorInstalacion : MonoBehaviour
         }
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // API PUBLICA
-    // ════════════════════════════════════════════════════════════════════
+    // --- API publica ---
 
     public void SetModoTest(bool activo)
     {
@@ -157,9 +138,7 @@ public class ConstructorInstalacion : MonoBehaviour
         AplicarVisibilidad();
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // ANCLAJE Y HELPERS DE ROTACION (escenario 1)
-    // ════════════════════════════════════════════════════════════════════
+    // --- Anclaje y helpers de rotacion (escenario 1) ---
 
     private void AnclarAlOrigen()
     {
@@ -186,9 +165,7 @@ public class ConstructorInstalacion : MonoBehaviour
 
     private Quaternion GiroConjunto => Quaternion.Euler(0f, rotacionY, 0f);
 
-    // ════════════════════════════════════════════════════════════════════
-    // ESCENARIO 1 — RACK
-    // ════════════════════════════════════════════════════════════════════
+    // --- Escenario 1: rack ---
 
     private void ConstruirEscenario1()
     {
@@ -304,9 +281,7 @@ public class ConstructorInstalacion : MonoBehaviour
         depthHelpersEsc1.Add(lr);
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // ESCENARIO 2 — ESTRUCTURA DE VIGAS A DOS NIVELES CON CRUCES DE SAN ANDRES
-    // ════════════════════════════════════════════════════════════════════
+    // --- Escenario 2: estructura de vigas a dos niveles con cruces de San Andres ---
 
     // El frente de la estructura se situa a 'distanciaTechoAlQR' del QR. Como el
     // transform esta anclado en offsetDesdeOrigen.z, restamos ese offset para que
@@ -398,9 +373,7 @@ public class ConstructorInstalacion : MonoBehaviour
         }
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // PRIMITIVAS COMUNES
-    // ════════════════════════════════════════════════════════════════════
+    // --- Primitivas comunes ---
 
     // Viga como prisma (cubo escalado) entre dos puntos, con seccion cuadrada 'g'.
     // CONSERVA su BoxCollider para que el dron pueda volar entre los huecos de la
@@ -459,9 +432,7 @@ public class ConstructorInstalacion : MonoBehaviour
         return solido;
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // VISIBILIDAD
-    // ════════════════════════════════════════════════════════════════════
+    // --- Visibilidad ---
 
     private void ConfigurarObjeto(GameObject obj, Material material, int escenario)
     {

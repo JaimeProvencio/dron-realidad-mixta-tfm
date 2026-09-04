@@ -1,12 +1,7 @@
 using UnityEngine;
 
-/*
- * ========================================================================
- * SCRIPT: WaypointVuelo
- * FUNCIÓN: Altera la escala y la interactividad del punto y de todos sus 
- * hijos (ej. conos direccionales) durante el vuelo.
- * ========================================================================
- */
+// WaypointVuelo — reduce la escala del waypoint y desactiva sus colliders
+// (los propios y los de sus hijos, p. ej. conos) mientras el dron vuela.
 public class WaypointVuelo : MonoBehaviour
 {
     [Header("Configuración Visual")]
@@ -14,27 +9,19 @@ public class WaypointVuelo : MonoBehaviour
     [SerializeField] private float factorEscalaVuelo = 0.2f;
 
     private Vector3 escalaOriginal;
-
-    // Array para almacenar todos los colisionadores de la jerarquía
     private Collider[] colisionadores;
 
     void Awake()
     {
         escalaOriginal = transform.localScale;
-
-        // Busca colisionadores en el objeto raíz y en TODOS sus hijos (incluyendo el cono)
+        // Incluye los colliders de los hijos (el true recorre la jerarquia)
         colisionadores = GetComponentsInChildren<Collider>(true);
     }
 
-    /// <summary>
-    /// Activa el modo de visualización de trayectoria de vuelo.
-    /// </summary>
     public void EstablecerModoVuelo(bool enVuelo)
     {
-        // 1. Escala (afecta automáticamente a los hijos)
         transform.localScale = enVuelo ? (escalaOriginal * factorEscalaVuelo) : escalaOriginal;
 
-        // 2. Física (recorre toda la jerarquía)
         if (colisionadores != null)
         {
             foreach (Collider col in colisionadores)

@@ -2,24 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- * ========================================================================
- * SCRIPT: GestorIdioma
- *
- * Singleton que centraliza el idioma de la interfaz (Espanol / Ingles).
- * Mantiene un diccionario clave -> (es, en) y expone Traducir(clave).
- *
- * Los textos FIJOS de la UI se actualizan mediante el componente
- * TextoTraducible, que se suscribe al evento OnIdiomaCambiado.
- *
- * Los textos DINAMICOS (generados por codigo, p. ej. toggles o el estado
- * del calibrador) piden la traduccion con Traducir(clave) cada vez que se
- * regeneran, y los scripts que los producen se refrescan en el evento.
- *
- * Para anadir un texto nuevo: agregar una entrada al diccionario en
- * InicializarDiccionario(). La clave debe describir el contenido.
- * ========================================================================
- */
+// GestorIdioma — singleton que centraliza el idioma de la interfaz (espanol /
+// ingles). Mantiene un diccionario clave -> (es, en) y expone Traducir(clave).
+// Los textos fijos usan el componente TextoTraducible; los dinamicos piden la
+// traduccion al regenerarse. Para anadir texto, nueva entrada en el diccionario.
 public class GestorIdioma : MonoBehaviour
 {
     public enum Idioma { Espanol, Ingles }
@@ -45,9 +31,7 @@ public class GestorIdioma : MonoBehaviour
         InicializarDiccionario();
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // API PUBLICA
-    // ════════════════════════════════════════════════════════════════════
+    // --- API publica ---
 
     /// <summary>Devuelve el texto de la clave en el idioma actual. Si no existe, devuelve la clave.</summary>
     public string Traducir(string clave)
@@ -70,9 +54,7 @@ public class GestorIdioma : MonoBehaviour
         OnIdiomaCambiado?.Invoke();
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // DICCIONARIO  ->  clave : { espanol, ingles }
-    // ════════════════════════════════════════════════════════════════════
+    // --- Diccionario: clave : { espanol, ingles } ---
 
     private void InicializarDiccionario()
     {

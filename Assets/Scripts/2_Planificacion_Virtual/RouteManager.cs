@@ -2,17 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-/*
- * ========================================================================
- * SCRIPT: RouteManager
- * FUNCION: Almacena la secuencia de waypoints y gestiona su representacion.
- *
- * ABSORCION DE RUIDO DE YAW: al crear un waypoint, si su orientacion difiere
- * menos de umbralYawGrados respecto al waypoint anterior (o el origen si es
- * el primero), hereda el yaw anterior. Asi el usuario puede mover el dron
- * con la muneca sin acumular giros minimos que el Tello no deberia ejecutar.
- * ========================================================================
- */
+// RouteManager — almacena la secuencia de waypoints y dibuja la ruta.
+// Absorcion de ruido de yaw: al crear un waypoint, si su orientacion difiere
+// menos de umbralYawGrados del anterior (o del origen si es el primero),
+// hereda ese yaw, evitando acumular giros minimos que el Tello no ejecutaria.
 [RequireComponent(typeof(LineRenderer))]
 public class RouteManager : MonoBehaviour
 {
@@ -162,11 +155,7 @@ public class RouteManager : MonoBehaviour
         return rutaCompleta;
     }
 
-    /*
-     * ========================================================================
-     * MODULO DE VISIBILIDAD Y ESTADO
-     * ========================================================================
-     */
+    // --- Visibilidad y estado de vuelo ---
 
     public void NotificarEstadoVuelo(bool enVuelo)
     {

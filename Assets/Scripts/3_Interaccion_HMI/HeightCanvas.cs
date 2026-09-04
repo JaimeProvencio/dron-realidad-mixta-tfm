@@ -1,13 +1,8 @@
 using UnityEngine;
 
-/*
- * ========================================================================
- * SCRIPT: HeightCanvas
- * FUNCIÓN: Módulo independiente que ancla la interfaz en el eje Y absoluto 
- * sobre un objetivo y calcula la rotación inversa para que el texto sea 
- * legible desde la perspectiva del usuario (Billboarding).
- * ========================================================================
- */
+// HeightCanvas — mantiene la interfaz flotando a una altura fija sobre el
+// dron y la orienta hacia el usuario (billboarding) para que el texto sea
+// siempre legible.
 public class HeightCanvas : MonoBehaviour
 {
     [Header("Referencias Espaciales")]
@@ -36,12 +31,10 @@ public class HeightCanvas : MonoBehaviour
     {
         if (objetivoDron == null || camaraUsuario == null) return;
 
-        // 1. ANCLAJE ABSOLUTO
-        // Se suma Vector3.up para ignorar la rotación local del dron.
+        // Anclaje en Y absoluto: Vector3.up ignora la rotacion local del dron
         transform.position = objetivoDron.position + (Vector3.up * altitudAbsoluta);
 
-        // 2. CÁLCULO DE ROTACIÓN (Billboarding Invertido)
-        // Se resta la cámara a la posición actual para alejar el eje Z y evitar el efecto espejo.
+        // Billboarding: se resta la camara (no al reves) para evitar el efecto espejo
         Vector3 vectorDireccion = transform.position - camaraUsuario.position;
 
         if (bloquearEjeVertical)

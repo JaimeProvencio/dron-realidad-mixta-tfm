@@ -1,23 +1,10 @@
 using UnityEngine;
 
-/*
- * ========================================================================
- * SCRIPT: WaypointValidator
- * FUNCION: Centraliza la validacion de seguridad de cada waypoint.
- *
- * El rayo evaluador nace desde el ultimo waypoint registrado (o el origen
- * si la ruta esta vacia), reflejando la trayectoria real del dron.
- *
- * Deteccion de colisiones por proyeccion volumetrica (BoxCast): evalua el
- * volumen 3D real del dron contra la malla MRUK.
- *
- * REGLA DE COMANDO VALIDO (Tello): el comando "go x y z" se rechaza si los
- * tres ejes estan simultaneamente por debajo de 20 cm. Por tanto, un
- * waypoint solo es valido si la mayor de las componentes |dx|, |dy|, |dz|
- * respecto al punto anterior supera 20 cm. Ademas se mantiene una altura
- * minima de seguridad sobre el suelo.
- * ========================================================================
- */
+// WaypointValidator — valida la seguridad de cada waypoint en tiempo real.
+// El rayo evaluador nace del ultimo waypoint (o del origen si la ruta esta
+// vacia). Comprueba tres reglas: comando Tello valido (algun eje supera los
+// 20 cm) con altura minima, geofence cilindrico (radio y altura maximos), y
+// colision contra la malla MRUK por proyeccion volumetrica (BoxCast).
 [RequireComponent(typeof(LineRenderer))]
 public class WaypointValidator : MonoBehaviour
 {

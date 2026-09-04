@@ -1,12 +1,9 @@
 using UnityEngine;
 
-/*
- * ========================================================================
- * SCRIPT: GhostMath
- * FUNCIÓN: Traducción de coordenadas Unity (Mundo) a Tello (Local).
- * MODIFICACIÓN: Inclusión del Umbral de Rotación para mitigar ruido de giro.
- * ========================================================================
- */
+// GhostMath — traduce coordenadas de Unity (mundo) a comandos del Tello
+// (locales, en cm). El intercambio de ejes refleja que el Tello usa X adelante,
+// Y derecha y Z arriba. Aplica un umbral de giro para no mandar rotaciones
+// minimas (ruido).
 public class GhostMath : MonoBehaviour
 {
     [Header("Configuración de Hardware")]
@@ -37,7 +34,6 @@ public class GhostMath : MonoBehaviour
     {
         float diferenciaGrados = Mathf.DeltaAngle(yawOrigen, yawDestino);
 
-        // APLICACIÓN DEL UMBRAL
         if (Mathf.Abs(diferenciaGrados) < umbralGiroGrados)
         {
             Debug.Log($"[Math] Rotación de {diferenciaGrados}º ignorada (bajo el umbral de {umbralGiroGrados}º).");

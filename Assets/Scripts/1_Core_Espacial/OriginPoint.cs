@@ -1,13 +1,7 @@
 using UnityEngine;
 
-/*
- * ========================================================================
- * SCRIPT: OriginPoint
- * FUNCIÓN: Establece el sistema de referencia (0,0,0) para el dron y 
- * gestiona la visualización del punto de despegue automático.
- * MODIFICACIÓN: Parametrización de la altura de despegue (0.9m).
- * ========================================================================
- */
+// OriginPoint — fija el sistema de referencia (0,0,0) del dron y muestra
+// el punto de despegue automatico a la altura configurada.
 public class OriginPoint : MonoBehaviour
 {
     [Header("Referencias Visuales")]

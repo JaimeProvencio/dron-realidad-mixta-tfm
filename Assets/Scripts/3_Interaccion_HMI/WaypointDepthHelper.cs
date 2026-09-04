@@ -1,17 +1,9 @@
-
 using UnityEngine;
 
-/*
- * ========================================================================
- * SCRIPT: WaypointDepthHelper (Versión MRUK Mesh Collision)
- * FUNCIÓN: Traza una línea blanca desde el holograma hacia la malla física.
- * ========================================================================
- */
-
+// WaypointDepthHelper — traza una plomada (linea blanca) desde el holograma
+// hacia abajo hasta la malla fisica de la habitacion (MRUK).
 [RequireComponent(typeof(LineRenderer))]
-
 public class WaypointDepthHelper : MonoBehaviour
-
 {
     [Header("Configuración de Escaneo")]
     [Tooltip("Capa donde el MRUK genera la malla física de la habitación. Usualmente es 'Default' o una capa específica creada por ti.")]
@@ -25,11 +17,10 @@ public class WaypointDepthHelper : MonoBehaviour
         lineaPlomada.startWidth = 0.005f;
         lineaPlomada.endWidth = 0.005f;
 
-        // Forzar el color blanco (Requiere que el material del LineRenderer soporte vértices de color, ej: Sprites/Default)
         lineaPlomada.startColor = Color.white;
         lineaPlomada.endColor = Color.white;
 
-        // Si el LineRenderer no tiene material asignado, inyectamos uno básico sin iluminación
+        // Necesita un material que soporte color de vertices; si no hay, se pone uno basico sin iluminacion
         if (lineaPlomada.material == null || lineaPlomada.material.name == "Default-Material")
         {
             lineaPlomada.material = new Material(Shader.Find("Sprites/Default"));

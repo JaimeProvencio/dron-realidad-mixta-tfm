@@ -1,31 +1,19 @@
 using System.Collections;
 using UnityEngine;
 
-/*
- * ========================================================================
- * SCRIPT: ControladorModoManual
- *
- * Gestiona el vuelo manual del Tello con los mandos de las Quest.
- *
- * ESQUEMA RC ESTANDAR:
- *   Joystick izquierdo Y -> throttle  (subir / bajar)
- *   Joystick izquierdo X -> yaw       (girar)
- *   Joystick derecho   Y -> pitch     (adelante / atras)
- *   Joystick derecho   X -> roll      (strafe izquierda / derecha)
- *
- * DESPEGUE:   boton A del mando derecho (Button.One).
- * ATERRIZAJE: boton B del mando derecho (Button.Two).
- *
- * VUELO FLUIDO: el comando "rc" se envia a frecuencia fija mientras el
- * dron esta en vuelo, replicando el stream continuo del SDK Tello.
- *
- * VOLVER AL MENU: al pulsar el boton de retorno, si el dron sigue en vuelo se
- * envia "land" antes de cambiar de modo, para no dejarlo volando sin control.
- * El boton se DESHABILITA mientras el dron despega o aterriza (ocupadoComando):
- * en esa ventana el Tello no acepta bien un aterrizaje y el dron quedaria
- * colgado. Al terminar la maniobra se vuelve a habilitar.
- * ========================================================================
- */
+// ControladorModoManual — vuelo manual del Tello con los mandos de la Quest.
+//
+// Esquema RC:
+//   Joystick izquierdo Y -> throttle (subir/bajar)
+//   Joystick izquierdo X -> yaw (girar)
+//   Joystick derecho   Y -> pitch (adelante/atras)
+//   Joystick derecho   X -> roll (strafe izq/der)
+// Despegue: boton A (Button.One). Aterrizaje: boton B (Button.Two).
+//
+// El "rc" se envia a frecuencia fija mientras el dron vuela. Al volver al menu,
+// si sigue en vuelo se aterriza antes de cambiar de modo; el boton de retorno se
+// deshabilita mientras despega o aterriza (ocupadoComando), cuando el Tello no
+// aceptaria bien un "land".
 public class ControladorModoManual : MonoBehaviour
 {
     [Header("Conexiones")]
@@ -55,17 +43,13 @@ public class ControladorModoManual : MonoBehaviour
     [Tooltip("Segundos de espera tras el despegue antes de habilitar el control RC.")]
     [SerializeField] private float tiempoEstabilizacionDespegue = 3f;
 
-    // ── Estado interno ───────────────────────────────────────────────────
+    // Estado interno
     private bool activo = false;
     private bool enVuelo = false;
     private bool esperandoOk = false;
     private bool ocupadoComando = false;
 
     private float timerRC = 0f;
-
-    // ════════════════════════════════════════════════════════════════════
-    // UNITY LIFECYCLE
-    // ════════════════════════════════════════════════════════════════════
 
     void Start()
     {
@@ -122,9 +106,7 @@ public class ControladorModoManual : MonoBehaviour
         }
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // DESPEGUE / ATERRIZAJE
-    // ════════════════════════════════════════════════════════════════════
+    // --- Despegue / aterrizaje ---
 
     private IEnumerator SecuenciaDespegue()
     {
@@ -160,9 +142,7 @@ public class ControladorModoManual : MonoBehaviour
         ocupadoComando = false;
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // API PUBLICA
-    // ════════════════════════════════════════════════════════════════════
+    // --- API publica ---
 
     public void Activar()
     {
@@ -181,10 +161,7 @@ public class ControladorModoManual : MonoBehaviour
         redUDP?.EnviarComando("rc 0 0 0 0");
     }
 
-    /// <summary>
-    /// Volver al modo ruta. Siempre disponible. Si el dron sigue en vuelo,
-    /// se ordena un aterrizaje seguro antes de cambiar de modo.
-    /// </summary>
+    // Volver al modo ruta: si el dron sigue en vuelo, aterriza antes de salir.
     public void Click_VolverModoRuta()
     {
         if (enVuelo && !ocupadoComando)
@@ -218,9 +195,7 @@ public class ControladorModoManual : MonoBehaviour
             gestorEstado.Click_VolverModoRutaDesdeModoManual();
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // RESPUESTAS DEL TELLO
-    // ════════════════════════════════════════════════════════════════════
+    // --- Respuestas del Tello ---
 
     private void ProcesarRespuesta(string respuesta)
     {
@@ -228,9 +203,7 @@ public class ControladorModoManual : MonoBehaviour
             esperandoOk = false;
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // UTILIDADES
-    // ════════════════════════════════════════════════════════════════════
+    // --- Utilidades ---
 
     private int Escalar(float valor, int velocidad)
     {

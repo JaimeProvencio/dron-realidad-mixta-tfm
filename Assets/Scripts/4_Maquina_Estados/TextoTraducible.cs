@@ -1,18 +1,10 @@
 ﻿using UnityEngine;
 using TMPro;
 
-/*
- * ========================================================================
- * SCRIPT: TextoTraducible
- *
- * Se coloca en cada TextMeshProUGUI FIJO de la interfaz. Indica la clave
- * de traduccion; el texto se actualiza solo al arrancar y cada vez que
- * cambia el idioma (se suscribe al evento de GestorIdioma).
- *
- * No usar en textos dinamicos (bateria, altura, toggles): esos los
- * gestionan sus propios scripts.
- * ========================================================================
- */
+// TextoTraducible — se coloca en cada texto fijo de la interfaz e indica su
+// clave de traduccion. Se actualiza al arrancar y cuando cambia el idioma
+// (suscrito a GestorIdioma). No usar en textos dinamicos (bateria, altura):
+// esos los gestiona su propio script.
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class TextoTraducible : MonoBehaviour
 {

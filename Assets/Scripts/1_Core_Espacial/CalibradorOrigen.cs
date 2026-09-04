@@ -1,17 +1,10 @@
 using UnityEngine;
 using TMPro;
 
-/*
- * ========================================================================
- * SCRIPT: CalibradorOrigen
- * FUNCION: Puente entre el MRUK (hardware) y Unity. Recibe la coordenada
- * del QR fisico y posiciona el dron aplicando un offset matematico.
- *
- * IDIOMA: el texto del boton es dinamico (cambia entre "escaneando" y
- * "escaneado"). Se guarda la clave del estado actual para poder repintar
- * el texto en el idioma correcto cuando el usuario cambia de idioma.
- * ========================================================================
- */
+// CalibradorOrigen — puente entre el MRUK (hardware) y Unity: recibe la
+// coordenada del marcador fisico y coloca el dron aplicando un offset.
+// El texto del boton es dinamico ("escaneando"/"escaneado"); se guarda la
+// clave del estado para repintarlo si el usuario cambia de idioma.
 public class CalibradorOrigen : MonoBehaviour
 {
     [Header("Referencias Principales")]

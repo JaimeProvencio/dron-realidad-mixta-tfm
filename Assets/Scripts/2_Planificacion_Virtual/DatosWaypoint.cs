@@ -1,12 +1,6 @@
 using UnityEngine;
 
-/*
- * ========================================================================
- * SCRIPT: DatosWaypoint
- * FUNCIÓN: Estructura de datos modular. Almacena la posición espacial y 
- * la orientación requerida para cada punto de la ruta.
- * ========================================================================
- */
+// DatosWaypoint — posicion y orientacion (yaw) de un punto de la ruta.
 [System.Serializable]
 public class DatosWaypoint
 {

@@ -5,34 +5,19 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-/*
- * ========================================================================
- * SCRIPT: RegistroComunicaciones (Instrumentacion SOLO-OBSERVACION)
- *
- * FUNCION:
- * Registra en un CSV cada comando enviado (TX) y cada respuesta recibida
- * (RX) por el canal de control del Tello, con marca de tiempo de alta
- * resolucion. De ese CSV se derivan OFFLINE (en PC, sin hardware) los
- * numeros de comunicaciones del cap. 4:
- *   - Latencia UDP:            t(RX) - t(ultimo TX que espera respuesta).
- *   - Tasa de comandos:        conteo de TX total y por tipo.
- *   - Timeouts:                TX que espera respuesta y no tiene RX.
- *   - Frecuencia real del rc:  intervalos entre TX de "rc" consecutivos.
- *
- * NO cambia el funcionamiento: solo escucha los eventos que TelloUDP ya
- * expone (OnComandoEnviado / OnRespuestaRecibida), encola la entrada en un
- * buffer en memoria (coste de microsegundos) y vuelca a disco FUERA de la
- * ruta caliente (corrutina periodica en hilo principal). Asi no perturba la
- * latencia ni la frecuencia que se estan midiendo.
- *
- * RELOJ: se usa System.Diagnostics.Stopwatch, no Time.time. La recepcion
- * UDP puede resolverse fuera del hilo principal de Unity, donde Time.time
- * no es valido; Stopwatch.Elapsed es seguro desde cualquier hilo.
- *
- * SALIDA: comms_AAAAMMDD_HHmmss.csv en Application.persistentDataPath (el
- * mismo sitio que los videos .h264). Se recupera con 'adb pull'.
- * ========================================================================
- */
+// RegistroComunicaciones — instrumentacion de solo observacion. Registra en un
+// CSV cada comando enviado (TX) y cada respuesta recibida (RX) del canal de
+// control del Tello, con marca de tiempo de alta resolucion. De ese CSV se
+// derivan offline (en PC, sin hardware) los numeros de comunicaciones del cap. 4:
+// latencia UDP, tasa de comandos, timeouts y frecuencia real del "rc".
+//
+// No cambia el funcionamiento: escucha los eventos que TelloUDP ya expone,
+// encola en un buffer en memoria y vuelca a disco fuera de la ruta caliente,
+// asi no perturba la latencia ni la frecuencia que se miden.
+//
+// Reloj: Stopwatch (no Time.time), porque la recepcion UDP puede ocurrir fuera
+// del hilo principal de Unity, donde Time.time no es valido.
+// Salida: comms_AAAAMMDD_HHmmss.csv en Application.persistentDataPath (adb pull).
 public class RegistroComunicaciones : MonoBehaviour
 {
     [Header("Conexiones")]
@@ -54,9 +39,7 @@ public class RegistroComunicaciones : MonoBehaviour
     private Coroutine volcadoCoroutine;
     private bool suscrito = false;
 
-    // ════════════════════════════════════════════════════════════════════
-    // CICLO DE VIDA
-    // ════════════════════════════════════════════════════════════════════
+    // --- Ciclo de vida ---
 
     void OnEnable()
     {
@@ -116,9 +99,7 @@ public class RegistroComunicaciones : MonoBehaviour
 
     void OnApplicationQuit() => Volcar();
 
-    // ════════════════════════════════════════════════════════════════════
-    // CAPTURA (posible hilo secundario: SOLO encolar, nada de API de Unity)
-    // ════════════════════════════════════════════════════════════════════
+    // --- Captura (posible hilo secundario: solo encolar, nada de API de Unity) ---
 
     private void RegistrarTX(string comando) => Encolar("TX", comando);
     private void RegistrarRX(string respuesta) => Encolar("RX", respuesta);
@@ -131,9 +112,7 @@ public class RegistroComunicaciones : MonoBehaviour
         buffer.Enqueue($"{t:F1},{dir},{mensaje}");
     }
 
-    // ════════════════════════════════════════════════════════════════════
-    // VOLCADO A DISCO (hilo principal, fuera de la ruta caliente)
-    // ════════════════════════════════════════════════════════════════════
+    // --- Volcado a disco (hilo principal, fuera de la ruta caliente) ---
 
     private IEnumerator VolcadoPeriodico()
     {

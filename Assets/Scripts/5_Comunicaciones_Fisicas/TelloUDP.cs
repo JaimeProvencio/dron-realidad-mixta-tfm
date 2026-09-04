@@ -4,18 +4,11 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-/*
- * ========================================================================
- * SCRIPT: TelloUDP
- * FUNCION: Gestion asincrona de comandos y liberacion forzada de puertos.
- *
- * RECONEXION: como el UDP no detecta la caida del dron (es sin conexion),
- * 'conectado' puede quedar en true aunque el Tello se haya apagado. Por
- * eso el boton Conectar debe llamar a Reconectar(), que cierra el socket
- * existente y abre uno nuevo, en vez de a InicializarSocket() (que aborta
- * si cree que ya esta conectado).
- * ========================================================================
- */
+// TelloUDP — gestion asincrona de comandos por UDP y liberacion de puertos.
+// Reconexion: el UDP no detecta la caida del dron (es sin conexion), asi que
+// 'conectado' puede quedar en true tras apagarse el Tello. Por eso el boton
+// Conectar llama a Reconectar() (cierra y reabre el socket), no a
+// InicializarSocket() (que aborta si cree que ya esta conectado).
 public class TelloUDP : MonoBehaviour
 {
     private UdpClient udpClient;
@@ -31,10 +24,7 @@ public class TelloUDP : MonoBehaviour
 
     private bool escuchando = false;
 
-    /// <summary>
-    /// Punto de entrada del boton Conectar. Cierra cualquier socket previo
-    /// y abre uno limpio, permitiendo reconectar tras apagar/encender el dron.
-    /// </summary>
+    // Boton Conectar: cierra cualquier socket previo y abre uno limpio.
     public void Reconectar()
     {
         CerrarConexion();

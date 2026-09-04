@@ -1,22 +1,10 @@
 using UnityEngine;
 
-/*
- * ========================================================================
- * SCRIPT: InvocadorCanvasPrincipal
- *
- * Se coloca en la AGARRADERA del canvas principal (el objeto padre que ya
- * sirve para desplazar el canvas manualmente). Al pulsar el gatillo de
- * agarre del mando derecho (HandTrigger, dedo corazon/anular), teletransporta
- * la agarradera a una distancia fija delante del mando, en la direccion a
- * la que apunta. El canvas, al ser hijo, la sigue.
- *
- * Es un reposicionamiento de un toque: coloca la agarradera y la deja ahi
- * (el arrastre fino se hace luego con el gatillo de arriba sobre la barra).
- *
- * Solo actua cuando el canvas principal esta activo; en los menus de vuelo
- * o modo manual el gatillo no hace nada.
- * ========================================================================
- */
+// InvocadorCanvasPrincipal — va en la agarradera del canvas principal. Al
+// pulsar el gatillo de agarre del mando derecho, teletransporta la agarradera
+// a una distancia fija delante del mando (el canvas, hijo, la sigue). Es un
+// reposicionamiento de un toque; el ajuste fino se hace luego arrastrando.
+// Solo actua cuando el canvas principal esta activo.
 public class InvocadorCanvasPrincipal : MonoBehaviour
 {
     [Header("Referencias")]

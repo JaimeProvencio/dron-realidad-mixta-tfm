@@ -1,15 +1,9 @@
 using UnityEngine;
 using TMPro;
 
-/*
- * ========================================================================
- * SCRIPT: TelemetryManager
- * FUNCION: Consulta ciclica de bateria del Tello.
- *
- * Watchdog: si no llegan datos durante un tiempo, asume perdida de
- * conexion y muestra "N/A".
- * ========================================================================
- */
+// TelemetryManager — consulta ciclica de la bateria del Tello. Incluye un
+// watchdog: si no llegan datos durante un tiempo, asume perdida de conexion
+// y muestra "N/A".
 public class TelemetryManager : MonoBehaviour
 {
     [SerializeField] private TelloUDP redUDP;

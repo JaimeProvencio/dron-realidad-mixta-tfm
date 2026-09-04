@@ -2,14 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 
-/*
- * ========================================================================
- * SCRIPT: RouteSimulator (Módulo de Gemelo Digital)
- * FUNCIÓN: Ejecuta una previsualización visual de la ruta calculada 
- * desplazando el holograma del dron a través de los waypoints.
- * No tiene conexión con la red UDP.
- * ========================================================================
- */
+// RouteSimulator — previsualiza la ruta desplazando el holograma del dron
+// por los waypoints (traslacion y luego giro en cada tramo). No usa la red:
+// es una comprobacion visual previa al vuelo real.
 public class RouteSimulator : MonoBehaviour
 {
     [Header("Conexiones")]
@@ -29,9 +24,7 @@ public class RouteSimulator : MonoBehaviour
     // Estado interno
     private bool simulacionEnCurso = false;
 
-    /// <summary>
-    /// Función principal que se conectará al botón "Simular Ruta" de la UI.
-    /// </summary>
+    // Se conecta al boton "Simular Ruta" de la UI.
     public async void EjecutarSimulacion()
     {
         if (simulacionEnCurso) return;
@@ -76,9 +69,7 @@ public class RouteSimulator : MonoBehaviour
 
         foreach (DatosWaypoint punto in secuenciaVuelo)
         {
-            // ==========================================
-            // FASE 1: TRASLACIÓN ESTRICTA
-            // ==========================================
+            // Fase 1: traslacion hasta el waypoint
             float distancia = Vector3.Distance(hologramaDron.position, punto.posicion);
 
             if (distancia > 0.01f)
@@ -98,9 +89,7 @@ public class RouteSimulator : MonoBehaviour
                 hologramaDron.position = punto.posicion;
             }
 
-            // ==========================================
-            // FASE 2: ROTACIÓN ESTRICTA (Yaw)
-            // ==========================================
+            // Fase 2: giro (yaw) hasta la orientacion del waypoint
             float diferenciaAngulo = Mathf.Abs(Mathf.DeltaAngle(chasis.eulerAngles.y, punto.rotacionY));
 
             if (diferenciaAngulo > 0.5f)
@@ -121,9 +110,7 @@ public class RouteSimulator : MonoBehaviour
                 chasis.rotation = rotacionDestino;
             }
 
-            // ==========================================
-            // FASE 3: PAUSA Y ESTABILIZACIÓN
-            // ==========================================
+            // Fase 3: pausa de estabilizacion
             await Task.Delay(1000);
         }
 

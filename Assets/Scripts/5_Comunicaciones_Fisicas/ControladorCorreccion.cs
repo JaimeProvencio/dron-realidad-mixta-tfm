@@ -2,27 +2,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Serialization;
 
-/*
- * ========================================================================
- * SCRIPT: ControladorCorreccion
- *
- * FUNCION:
- * Orquesta el flujo de correccion de posicion (Opcion B del menu de
- * waypoint). Coloca el dron de correccion en la posicion teorica del
- * waypoint actual con la orientacion del ultimo waypoint ejecutado e
- * instancia un volumen de error aceptable.
- *
- * REGLA DEL TELLO: el comando go es invalido si los tres ejes estan por
- * debajo de 20 cm. El volumen de error es por tanto un CUBO de 40 cm de
- * lado (+-20 cm por eje). Mientras el dron de correccion este dentro de
- * ese cubo, el boton de aceptar se deshabilita y el volumen se muestra
- * rojo (correccion imposible/innecesaria). Fuera, se muestra verde y el
- * boton se habilita.
- *
- * La rotacion se fija ANTES de activar el dron para que el FijarEjes
- * capture ese angulo en su OnEnable y no lo machaque.
- * ========================================================================
- */
+// ControladorCorreccion — orquesta la correccion de posicion (opcion del menu
+// de waypoint): coloca el dron de correccion en la posicion teorica del
+// waypoint e instancia un volumen de error.
+//
+// Regla del Tello: el "go" es invalido si los tres ejes estan por debajo de
+// 20 cm, asi que el volumen de error es un cubo de 40 cm de lado. Dentro del
+// cubo el boton de aceptar se deshabilita y el cubo se muestra rojo (correccion
+// imposible); fuera, verde y habilitado.
+//
+// La rotacion se fija ANTES de activar el dron para que FijarEjes capture ese
+// angulo en su OnEnable y no lo machaque.
 public class ControladorCorreccion : MonoBehaviour
 {
     [Header("Conexiones")]
