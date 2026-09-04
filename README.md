@@ -85,15 +85,18 @@ El flujo general es: **calibrar → planificar y validar → simular → ejecuta
 
 ## Uso básico
 
-Con el proyecto en marcha sobre la Quest, el flujo de operación es:
+Para volar el dron real, las gafas deben estar conectadas a la red Wi-Fi del propio
+Tello (la crea el dron al encenderse); dentro de la aplicación, el botón «Conectar»
+abre el enlace. A partir de ahí, el flujo de operación es:
 
 1. **Calibrar el origen.** Se escanea el marcador impreso con las gafas. El sistema
    fija el origen de coordenadas común al espacio real y virtual, y coloca el dron
    holográfico en el punto de despegue.
 2. **Definir la ruta.** Desde el menú se colocan los puntos de paso sobre el espacio
-   real. Cada punto se valida en el momento: se marca en rojo si sale del *geofence*,
-   si el trayecto choca con la malla del entorno o si queda demasiado cerca del punto
-   anterior (por debajo del mínimo que admite el dron).
+   real. Cada tramo se valida en el momento y la línea cambia de color según el
+   resultado: cian si es válido, rosa si el trayecto choca con la malla del entorno,
+   azul oscuro si sale del *geofence* y rojo si el punto queda demasiado cerca del
+   anterior o del suelo (por debajo del mínimo que admite el dron).
 3. **Simular (opcional).** Un dron fantasma recorre la ruta en virtual para revisarla
    antes de volar de verdad.
 4. **Ejecutar.** Tras confirmar, el dron real despega y recorre la ruta tramo a tramo,
