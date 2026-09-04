@@ -109,10 +109,7 @@ public class WaypointValidator : MonoBehaviour
             : new Vector3(0.15f, 0.15f, 0.15f);
 
         if (Physics.BoxCast(origen, mitadTamanio, direccion, out RaycastHit hit, transform.rotation, distancia, capaEntornoFisico))
-        {
-            Debug.Log($"[Validador] COLISION FISICA VOLUMETRICA: Interseccion con -> {hit.collider.gameObject.name}");
             return TipoError.ColisionFisica;
-        }
 
         return TipoError.Ninguno;
     }

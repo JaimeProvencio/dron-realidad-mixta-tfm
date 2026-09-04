@@ -19,7 +19,6 @@ public class MRUtilityManager : MonoBehaviour
             // Se escuchan creacion y actualizacion de la habitacion
             MRUK.Instance.RoomCreatedEvent.AddListener(AlDetectarHabitacion);
             MRUK.Instance.RoomUpdatedEvent.AddListener(AlDetectarHabitacion);
-            Debug.Log("[MR] Suscrito con éxito a eventos nativos de creación y actualización.");
         }
     }
 
@@ -43,20 +42,16 @@ public class MRUtilityManager : MonoBehaviour
             Renderer[] mallasGeneradas = habitacionActual.GetComponentsInChildren<Renderer>(true);
 
             foreach (Renderer malla in mallasGeneradas)
-            {
                 malla.enabled = mallaVisible;
-            }
-            Debug.Log($"[MR] Estado visual actualizado a: {mallaVisible}. Renderizadores afectados: {mallasGeneradas.Length}");
         }
         else
         {
-            Debug.LogWarning("[MR] Error: No se ha detectado una habitación activa en el entorno para manipular.");
+            Debug.LogWarning("[MR] No hay una habitacion activa de MRUK para mostrar la malla.");
         }
     }
 
     public void IniciarCapturaEscena()
     {
-        Debug.Log("[MR] Solicitando al SO la utilidad de escaneo espacial...");
         recargaPendiente = true;
         OVRScene.RequestSpaceSetup();
     }
@@ -66,7 +61,6 @@ public class MRUtilityManager : MonoBehaviour
         if (!pausa && recargaPendiente)
         {
             recargaPendiente = false;
-            Debug.Log("[MR] SO cerrado. Recargando datos físicos de la habitación...");
 
             if (MRUK.Instance != null)
             {
@@ -82,10 +76,7 @@ public class MRUtilityManager : MonoBehaviour
     private void AlDetectarHabitacion(MRUKRoom habitacionGenerada)
     {
         if (habitacionGenerada != null)
-        {
-            Debug.Log($"[MR] Habitación '{habitacionGenerada.name}' detectada. Iniciando auditoría física y visual...");
             StartCoroutine(RutinaEnrutarCapa(habitacionGenerada));
-        }
     }
 
     private IEnumerator RutinaEnrutarCapa(MRUKRoom habitacionGenerada)
@@ -98,26 +89,17 @@ public class MRUtilityManager : MonoBehaviour
         if (capaEntorno != -1)
         {
             Collider[] colisionadoresHabitacion = habitacionGenerada.GetComponentsInChildren<Collider>(true);
-            int conteoExitoso = 0;
-
             foreach (Collider colisionador in colisionadoresHabitacion)
-            {
                 colisionador.gameObject.layer = capaEntorno;
-                conteoExitoso++;
-            }
-            Debug.Log($"[MR] Arquitectura física asegurada: {conteoExitoso} elementos movidos a EntornoReal.");
         }
         else
         {
-            Debug.LogError("[MR] ERROR: La capa 'EntornoReal' no existe en los Tags & Layers de Unity.");
+            Debug.LogError("[MR] La capa 'EntornoReal' no existe en Tags & Layers de Unity.");
         }
 
         // Visual: la geometria nueva respeta el estado de visibilidad actual de la UI
         Renderer[] mallasNuevas = habitacionGenerada.GetComponentsInChildren<Renderer>(true);
         foreach (Renderer malla in mallasNuevas)
-        {
             malla.enabled = mallaVisible;
-        }
-        Debug.Log($"[MR] Sincronización visual completada. Renderizadores interceptados: {mallasNuevas.Length}. Visibilidad actual: {mallaVisible}");
     }
 }

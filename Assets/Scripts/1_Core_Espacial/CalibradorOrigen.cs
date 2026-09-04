@@ -45,20 +45,17 @@ public class CalibradorOrigen : MonoBehaviour
     {
         calibracionBloqueada = false;
         ActualizarUI("calibrador_escaneando", Color.black);
-        Debug.Log("[Calibrador] Sistema desbloqueado. Esperando evento pasivo del SDK.");
 
+        // Si ya se escaneo el marcador antes, se recalibra directamente con el
         if (marcadorFisicoGuardado != null)
-        {
-            Debug.Log("[Calibrador] Reutilizando ancla fisica conocida. Recalibrando al instante.");
             CalibrarDesdeMarcador(marcadorFisicoGuardado);
-        }
     }
 
     public void RecibirTrackableMRUK(Meta.XR.MRUtilityKit.MRUKTrackable trackableDetectado)
     {
         if (trackableDetectado == null)
         {
-            Debug.LogError("[Calibrador] ERROR: Objeto vacio. Asegurate de usar 'Dynamic MRUKTrackable' en el Inspector.");
+            Debug.LogError("[Calibrador] Trackable vacio. Usa 'Dynamic MRUKTrackable' en el Inspector.");
             return;
         }
 
@@ -91,7 +88,7 @@ public class CalibradorOrigen : MonoBehaviour
         // 4. Bloquear el sistema y notificar
         calibracionBloqueada = true;
         ActualizarUI("calibrador_escaneado", Color.green);
-        Debug.Log("[Calibrador] Origen fijado con exito.");
+        Debug.Log("[Calibrador] Origen calibrado.");
     }
 
     /// <summary>Guarda la clave y el color, y pinta el texto en el idioma actual.</summary>

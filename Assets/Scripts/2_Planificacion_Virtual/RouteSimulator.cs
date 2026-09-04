@@ -43,7 +43,6 @@ public class RouteSimulator : MonoBehaviour
         }
 
         simulacionEnCurso = true;
-        Debug.Log("[Simulador] Iniciando previsualización visual estricta (Traslación -> Rotación)...");
 
         if (supervisorRuta.validadorSeguridad != null)
         {
@@ -113,8 +112,6 @@ public class RouteSimulator : MonoBehaviour
             // Fase 3: pausa de estabilizacion
             await Task.Delay(1000);
         }
-
-        Debug.Log("[Simulador] Simulación finalizada. El dron permanece en el último Waypoint.");
 
         if (supervisorRuta.validadorSeguridad != null)
         {

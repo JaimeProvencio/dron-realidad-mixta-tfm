@@ -35,7 +35,6 @@ public class TelloUDP : MonoBehaviour
     {
         if (conectado) return;
 
-        Debug.Log("[Red UDP] Inicializando socket...");
         try
         {
             udpClient = new UdpClient();
@@ -61,7 +60,6 @@ public class TelloUDP : MonoBehaviour
         {
             byte[] data = Encoding.UTF8.GetBytes(comando);
             await udpClient.SendAsync(data, data.Length);
-            Debug.Log($"[Red UDP] -> ENVIADO: {comando}");
             OnComandoEnviado?.Invoke(comando);
         }
         catch (Exception e)
@@ -78,7 +76,6 @@ public class TelloUDP : MonoBehaviour
             {
                 UdpReceiveResult resultado = await udpClient.ReceiveAsync();
                 string respuesta = Encoding.UTF8.GetString(resultado.Buffer).Trim().ToLower();
-                Debug.Log($"[Red UDP] <- RECIBIDO: {respuesta}");
                 OnRespuestaRecibida?.Invoke(respuesta);
             }
             catch (ObjectDisposedException)
@@ -119,7 +116,6 @@ public class TelloUDP : MonoBehaviour
             finally
             {
                 udpClient = null;
-                Debug.Log("[Red UDP] Socket destruido y puerto liberado.");
             }
         }
     }

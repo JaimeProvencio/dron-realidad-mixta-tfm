@@ -26,7 +26,6 @@ public class GhostMath : MonoBehaviour
         float telloZ = deltaLocal.y * 100f;
 
         string comando = $"go {(int)telloX} {(int)telloY} {(int)telloZ} {(int)velocidad}";
-        Debug.Log($"[Math] Local: {deltaLocal} | Comando: {comando}");
         return comando;
     }
 
@@ -35,10 +34,7 @@ public class GhostMath : MonoBehaviour
         float diferenciaGrados = Mathf.DeltaAngle(yawOrigen, yawDestino);
 
         if (Mathf.Abs(diferenciaGrados) < umbralGiroGrados)
-        {
-            Debug.Log($"[Math] Rotación de {diferenciaGrados}º ignorada (bajo el umbral de {umbralGiroGrados}º).");
-            return string.Empty;
-        }
+            return string.Empty;   // giro por debajo del umbral: no se envia
 
         if (diferenciaGrados > 0)
             return $"cw {Mathf.RoundToInt(diferenciaGrados)}";
