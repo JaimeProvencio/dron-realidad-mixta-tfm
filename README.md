@@ -83,6 +83,34 @@ El flujo general es: **calibrar → planificar y validar → simular → ejecuta
 
 ---
 
+## Uso básico
+
+Con el proyecto en marcha sobre la Quest, el flujo de operación es:
+
+1. **Calibrar el origen.** Se escanea el marcador impreso con las gafas. El sistema
+   fija el origen de coordenadas común al espacio real y virtual, y coloca el dron
+   holográfico en el punto de despegue.
+2. **Definir la ruta.** Desde el menú se colocan los puntos de paso sobre el espacio
+   real. Cada punto se valida en el momento: se marca en rojo si sale del *geofence*,
+   si el trayecto choca con la malla del entorno o si queda demasiado cerca del punto
+   anterior (por debajo del mínimo que admite el dron).
+3. **Simular (opcional).** Un dron fantasma recorre la ruta en virtual para revisarla
+   antes de volar de verdad.
+4. **Ejecutar.** Tras confirmar, el dron real despega y recorre la ruta tramo a tramo,
+   deteniéndose en cada punto a la espera de una decisión: continuar al siguiente,
+   corregir la posición o aterrizar en la vertical.
+5. **Modo manual** (condición de comparación del estudio). Permite pilotar el dron
+   directamente con los mandos: el *joystick* izquierdo gobierna altura y giro, el
+   derecho el avance y el desplazamiento lateral, y los botones del mando derecho el
+   despegue y el aterrizaje.
+6. **Modo de prueba.** Genera escenarios virtuales de inspección (una estantería o
+   una estructura de vigas) para practicar o evaluar la interfaz.
+
+> El funcionamiento detallado, el diseño del sistema y los resultados se describen en
+> la memoria del Trabajo Fin de Máster.
+
+---
+
 ## Estado del proyecto
 
 Proyecto desarrollado como Trabajo Fin de Máster. Es un **prototipo de investigación**,
