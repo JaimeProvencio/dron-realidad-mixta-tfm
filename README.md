@@ -13,11 +13,12 @@ físico mientras recibe telemetría en directo.
 ## ¿Qué hace?
 
 - **Calibración espacial.** Se ancla el origen de coordenadas del sistema a un
-  marcador físico, de modo que el mundo virtual y el mundo real comparten un mismo
-  sistema de referencia.
+  marcador QR impreso, de modo que el mundo virtual y el mundo real comparten un
+  mismo sistema de referencia.
 - **Planificación de ruta.** El usuario coloca waypoints en el aire con los mandos
-  de la Quest. Cada waypoint se valida contra un *geofence* (radio y altura máximos)
-  antes de aceptarse.
+  de la Quest. Cada tramo se valida en el momento contra tres criterios: un *geofence*
+  cilíndrico (radio y altura máximos), la colisión volumétrica contra la malla del
+  entorno real y la resolución mínima de movimiento que admite el Tello.
 - **Simulación previa.** Un "dron fantasma" recorre la ruta en virtual para revisar
   la trayectoria sin riesgo antes de volar de verdad.
 - **Ejecución física.** La misión se traduce a comandos del Tello y se envía por
@@ -89,7 +90,7 @@ Para volar el dron real, las gafas deben estar conectadas a la red Wi-Fi del pro
 Tello (la crea el dron al encenderse); dentro de la aplicación, el botón «Conectar»
 abre el enlace. A partir de ahí, el flujo de operación es:
 
-1. **Calibrar el origen.** Se escanea el marcador impreso con las gafas. El sistema
+1. **Calibrar el origen.** Se escanea el marcador QR impreso con las gafas. El sistema
    fija el origen de coordenadas común al espacio real y virtual, y coloca el dron
    holográfico en el punto de despegue.
 2. **Definir la ruta.** Desde el menú se colocan los puntos de paso sobre el espacio
@@ -106,11 +107,14 @@ abre el enlace. A partir de ahí, el flujo de operación es:
    directamente con los mandos: el *joystick* izquierdo gobierna altura y giro, el
    derecho el avance y el desplazamiento lateral, y los botones del mando derecho el
    despegue y el aterrizaje.
-6. **Modo de prueba.** Genera escenarios virtuales de inspección (una estantería o
-   una estructura de vigas) para practicar o evaluar la interfaz.
+6. **Modo de prueba.** Genera los dos escenarios del estudio: una estantería (tarea
+   simple, con los puntos de paso sobre un plano) o una estructura de vigas a dos
+   niveles (tarea compleja en 3D, volando entre los huecos), para practicar o evaluar
+   la interfaz.
 
 > El funcionamiento detallado, el diseño del sistema y los resultados se describen en
-> la memoria del Trabajo Fin de Máster.
+> la memoria del Trabajo Fin de Máster, cuyo acceso está restringido a la comunidad
+> universitaria de la UC3M.
 
 ---
 
