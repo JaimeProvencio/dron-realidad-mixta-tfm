@@ -4,7 +4,7 @@ Aplicación de Realidad Mixta para **Meta Quest** que permite planificar, simula
 supervisar el vuelo de un dron **DJI Tello** dentro del espacio físico real del
 usuario. El operador coloca puntos de ruta (*waypoints*) en su propia habitación,
 valida que la trayectoria es segura y, después, ejecuta la misión sobre el dron
-físico mientras recibe telemetría en directo.
+físico, que supervisa a la vista y puede corregir en cada punto.
 
 > Trabajo Fin de Máster · Universidad Carlos III de Madrid (UC3M) · Autor: **Jaime Provencio Solís** · 2026
 
@@ -16,13 +16,17 @@ físico mientras recibe telemetría en directo.
   marcador QR impreso, de modo que el mundo virtual y el mundo real comparten un
   mismo sistema de referencia.
 - **Planificación de ruta.** El usuario coloca waypoints en el aire con los mandos
-  de la Quest. Cada tramo se valida en el momento contra tres criterios: un *geofence*
-  cilíndrico (radio y altura máximos), la colisión volumétrica contra la malla del
-  entorno real y la resolución mínima de movimiento que admite el Tello.
+  de la Quest. Cada tramo se valida en el momento contra tres criterios, en este orden:
+  la resolución mínima de movimiento que admite el Tello (al menos 20 cm en algún eje)
+  junto con una altura mínima sobre el suelo, un *geofence* cilíndrico (radio y altura
+  máximos) y la colisión volumétrica del trayecto contra la malla del entorno real.
 - **Simulación previa.** Un "dron fantasma" recorre la ruta en virtual para revisar
   la trayectoria sin riesgo antes de volar de verdad.
 - **Ejecución física.** La misión se traduce a comandos del Tello y se envía por
-  UDP. El sistema registra la telemetría (posición, batería, tiempos) durante el vuelo.
+  UDP. La ejecución es en lazo abierto: el sistema no conoce la posición real del dron
+  y la única telemetría que consulta es el nivel de batería. Opcionalmente, graba en
+  las gafas el vídeo de la cámara del dron (flujo H.264 crudo, que se convierte a MP4
+  en un ordenador).
 - **Corrección asistida.** Tras cada tramo, el operador puede reposicionar el dron
   con ayuda visual que respeta la resolución mínima de movimiento del Tello (20 cm por eje).
 
@@ -43,7 +47,7 @@ El código se organiza en capas con responsabilidad única. Cada carpeta de
 | 6 | `6_Entorno_MRUK` | Integración con el entorno de la Quest (Meta MR Utility Kit). |
 | — | `Pruebas` | Montaje de la instalación de pruebas y modo de vuelo manual. |
 
-El flujo general es: **calibrar → planificar y validar → simular → ejecutar sobre el dron → registrar**.
+El flujo general es: **calibrar → planificar y validar → simular → ejecutar sobre el dron → supervisar y corregir en cada punto**.
 
 ---
 
